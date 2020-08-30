@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Tasks
+{% endblock %}
+
+{% block content %}
+<h1>Carrier</h1>
+<hr>
+<h3>Purse balance: {{ current_user.purse.amount|round(2) }}</h3>
+<hr>
+<h3>Carrier tasks</h3>
+{% for carrier_task in carrier_tasks %}
+    {{ carrier_task.task.comment }} - {{ carrier_task.task.status.value }} - {{ carrier_task.task.price|round(2) }}<br>
+{% endfor %}
+<hr>
+<h3>Free tasks</h3>
+{% for task in free_tasks %}
+    {{ task.comment }} - {{ task.status.value }} - {{ task.price|round(2) }}<button class="btn btn-primary" style="margin-left: 10px;" value="{{ task.id }}">Take</button><br><br>
+{% endfor %}
+<script>
+const buttons = document.querySelectorAll('.btn');
+buttons.forEach(button => {
+    button.addEventListener('click', event => {
+        fetch('/carrier', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({'task_id': event.target.value})
+        }).then(response => {
+            location.reload();
+        })
+        .catch(response => {
+            console.log(response);
+        })
+    })
+});
+</script>
+{% endblock %}

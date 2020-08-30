@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Consignor interface
+{% endblock %}
+
+{% block content %}
+<h1>Consignor</h1>
+<hr>
+<form method="POST" action="/consignor">
+    <h3>Create task</h3>
+    {{ form.csrf_token }}
+    {{ form.comment.label }}
+    {{ form.comment(class_='form-control') }}<br>
+
+    {% for error in form.comment.errors %}
+        {{ error }}<br>
+    {% endfor %}
+
+    {{ form.price.label }}
+    {{ form.price(class_='form-control') }}<br>
+
+    {% for error in form.price.errors %}
+        {{ error }}<br>
+    {% endfor %}
+    <input type="submit" value="Create">
+</form>
+<br>
+<hr>
+<h3>Tasks</h3>
+{% for consignor_task in consignor_tasks %}
+    {{ consignor_task.task.comment }} - {{ consignor_task.task.status.value }} - {{ consignor_task.task.price|round(2) }}<br>
+{% endfor %}
+{% endblock %}
